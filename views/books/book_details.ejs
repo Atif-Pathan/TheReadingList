@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The title will be the book's title -->
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- A link to go back to the dashboard -->
+      <a href="/dashboard" class="back-link">&larr; Back to Dashboard</a>
+
+      <div class="book-detail-layout">
+        <!-- Left Column: Cover Image -->
+        <div class="book-cover">
+          <img
+            src="<%= book.cover_image_url %>"
+            alt="Cover of <%= book.title %>"
+          />
+        </div>
+
+        <!-- Right Column: Book Information -->
+        <div class="book-info">
+          <h1><%= book.title %></h1>
+          <h2>by <%= book.author %></h2>
+
+          <div class="book-meta">
+            <p><strong>Genre:</strong> <%= book.genre || 'Not specified' %></p>
+            <p>
+              <strong>My Rating:</strong> <% if (book.rating) { %> <%=
+              book.rating %> / 5 <% } else { %> Not yet rated <% } %>
+            </p>
+          </div>
+
+          <div class="book-review">
+            <h3>My Review & Notes</h3>
+            <p><%= book.review || 'No review yet.' %></p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <a href="/books/<%= book.id %>/edit" class="btn btn-primary"
+              >Edit Book</a
+            >
+            <!-- Delete should be a form to use a POST request -->
+            <form
+              action="/books/<%= book.id %>/delete"
+              method="POST"
+              style="display: inline"
+            >
+              <button type="submit" class="btn btn-danger">Delete Book</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - <%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>My Dashboard</h1>
+        <div>
+          <button>
+            <a href="/categories/new"> + New Category</a>
+          </button>
+          <button>
+            <a href="/books/new">+ New Book</a>
+          </button>
+        </div>
+      </div>
+
+      <div class="kanban-board">
+        <!-- Loop through each category to create a column -->
+        <% categories.forEach(category => { %>
+        <div class="kanban-column">
+          <h2><%= category.name %></h2>
+
+          <!-- Filter and then loop through only the books for this category -->
+          <% const booksInCategory = books.filter(book => book.category_id ===
+          category.id); %> <% if (booksInCategory.length > 0) { %> <%
+          booksInCategory.forEach(book => { %>
+          <!-- Each book is a clickable link to its future detail page -->
+          <a href="/books/<%= book.id %>">
+            <div class="book-card">
+              <img
+                src="<%= book.cover_image_url %>"
+                alt="Cover of <%= book.title %>"
+              />
+              <h3><%= book.title %></h3>
+              <p><%= book.author %></p>
+            </div>
+          </a>
+          <% }); %> <% } else { %>
+          <p>No books in this category yet.</p>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </body>
+</html>
