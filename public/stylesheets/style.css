@@ -1,0 +1,253 @@
+/* public/stylesheets/style.css */
+
+/* --- Global Styles & Light Theme --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --card-bg: #ffffff;
+  --border-color: #dee2e6;
+  --header-color: #495057;
+  --link-color: #007bff;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+h1,
+h2 {
+  color: var(--header-color);
+  font-weight: 700;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* --- General Layout Container --- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.dashboard-header {
+  display: flex;
+  /* gap: 2rem; */
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --- Landing Page (index.ejs) Specific Styles --- */
+.welcome-container {
+  text-align: center;
+  padding-top: 10vh;
+}
+
+.welcome-container a {
+  display: inline-block;
+  background-color: var(--link-color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.welcome-container a:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+/* --- Kanban Dashboard Styles --- */
+.kanban-board {
+  display: grid;
+  /* Create 4 equal columns */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.kanban-column {
+  background-color: var(--bg-color);
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.kanban-column h2 {
+  margin-top: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  font-size: 1.25rem;
+}
+
+/* --- Book Card Styles --- */
+.book-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.book-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3; /* Common book cover ratio */
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.book-card h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.book-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+  .kanban-board {
+    /* Switch to 2 columns on tablets */
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 1rem;
+  }
+  .kanban-board {
+    /* Stack to 1 column on mobile */
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Book Detail Page Styles --- */
+.back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.book-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1 part for image, 2 parts for info */
+  gap: 3rem;
+  align-items: start;
+}
+
+.book-cover img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.book-info h1 {
+  margin-top: 0;
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.book-info h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: #6c757d;
+}
+
+.book-meta {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.book-meta p {
+  margin: 0.5rem 0;
+}
+
+.book-review {
+  margin-bottom: 2rem;
+}
+
+/* --- Action Button Styles --- */
+.action-buttons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.action-buttons .btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: var(--link-color);
+  color: white;
+}
+.btn-primary:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+/* --- Responsive for Detail Page --- */
+@media (max-width: 768px) {
+  .book-detail-layout {
+    /* Stack columns on smaller screens */
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .book-cover {
+    text-align: center; /* Center the image when stacked */
+  }
+
+  .book-info h1 {
+    font-size: 2rem;
+  }
+}
