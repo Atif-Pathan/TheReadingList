@@ -22,23 +22,43 @@ async function getAllCategories() {
 }
 
 async function getBookById(id) {
-  // The controller already handles the case where the book isn't found,
-  // so we can simplify this.
-  const { rows } = await pool.query('SELECT * FROM books WHERE id = ($1)', [
-    id,
-  ]);
-  return rows[0]; // This will be `undefined` if not found.
+  try {
+    const { rows } = await pool.query(
+      `SELECT
+         books.*,
+         categories.name AS category_name
+       FROM books
+       JOIN categories ON books.category_id = categories.id
+       WHERE books.id = $1`,
+      [id],
+    );
+    return rows[0];
+  } catch (error) {
+    console.error('Error executing search query:', error.stack);
+    throw error;
+  }
 }
 
-// async function insertMessage(text, user) {
-//   await pool.query(
-//     'INSERT INTO messages (message_text, username) VALUES ($1, $2)',
-//     [text, user],
-//   );
-// }
+async function insertBook(book) {
+  const { title, author, cover_image_url, genre, rating, review, category_id } =
+    book;
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO books (title, author, cover_image_url, genre, rating, review, category_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING id`, // RETURNING id is useful to get the new book's ID
+      [title, author, cover_image_url, genre, rating, review, category_id],
+    );
+    return rows[0]; // Returns { id: new_book_id }
+  } catch (err) {
+    console.error('Error inserting book:', err.stack);
+    throw err;
+  }
+}
 
 module.exports = {
   getAllBooks,
   getAllCategories,
   getBookById,
+  insertBook,
 };
