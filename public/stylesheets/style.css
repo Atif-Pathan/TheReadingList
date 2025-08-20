@@ -1,253 +1,397 @@
-/* public/stylesheets/style.css */
+/* public/stylesheets/style.css (Complete & Fixed Version) */
 
-/* --- Global Styles & Light Theme --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+/* --- Fonts & Theme --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap');
 
 :root {
-  --bg-color: #f8f9fa;
-  --text-color: #212529;
-  --card-bg: #ffffff;
-  --border-color: #dee2e6;
-  --header-color: #495057;
-  --link-color: #007bff;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Literata', serif;
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --surface-2: #f8f6f2;
+  --text: #2c2828;
+  --muted: #6b7280;
+  --border: #e7e2d9;
+  --accent: #2f7a7b;
+  --accent-contrast: #ffffff;
+  --danger: #d64545;
+  --status-read: #e6f3f2;
+  --status-read-text: #2b5560;
+  --status-want: #fef3e6;
+  --status-want-text: #7a4a1b;
+  --status-current: #e9e8f8;
+  --status-current-text: #433f7a;
+  --status-unfinished: #f5e9e8;
+  --status-unfinished-text: #7a3f3f;
+  --radius: 12px;
+  --shadow-sm: 0 1px 2px rgba(20, 20, 20, 0.04);
+  --shadow-md: 0 4px 12px rgba(20, 20, 20, 0.08);
 }
 
+/* --- Global Resets & Styles --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
   margin: 0;
   padding: 2rem;
+  font-family: var(--font-sans);
+  color: var(--text);
+  background-color: var(--bg);
   line-height: 1.6;
 }
-
 h1,
-h2 {
-  color: var(--header-color);
+h2,
+h3 {
+  font-family: var(--font-serif);
   font-weight: 700;
 }
-
 a {
-  color: var(--link-color);
+  color: var(--accent);
   text-decoration: none;
 }
-
 a:hover {
   text-decoration: underline;
 }
 
-/* --- General Layout Container --- */
+/* --- Layout & Components --- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
-
-.dashboard-header {
-  display: flex;
-  /* gap: 2rem; */
+.btn {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+.btn:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+.btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
 }
 
-/* --- Landing Page (index.ejs) Specific Styles --- */
+/* --- Welcome Page --- */
 .welcome-container {
   text-align: center;
   padding-top: 10vh;
 }
-
-.welcome-container a {
-  display: inline-block;
-  background-color: var(--link-color);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
+.welcome-container .btn-primary {
   margin-top: 1rem;
 }
 
-.welcome-container a:hover {
-  text-decoration: none;
-  opacity: 0.9;
+/* --- Dashboard --- */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
-
-/* --- Kanban Dashboard Styles --- */
+.dashboard-header h1 {
+  margin: 0;
+}
+.actions {
+  display: flex;
+  gap: 12px;
+}
 .kanban-board {
   display: grid;
-  /* Create 4 equal columns */
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
-  width: 100%;
 }
-
 .kanban-column {
-  background-color: var(--bg-color);
-  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   padding: 1rem;
-  border: 1px solid var(--border-color);
-}
-
-.kanban-column h2 {
-  margin-top: 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--border-color);
-  font-size: 1.25rem;
-}
-
-/* --- Book Card Styles --- */
-.book-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.book-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.book-card img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 2 / 3; /* Common book cover ratio */
-  object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 0.75rem;
-}
-
-.book-card h3 {
-  margin: 0 0 0.25rem 0;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.book-card p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
-/* --- Responsive Design --- */
-@media (max-width: 1024px) {
-  .kanban-board {
-    /* Switch to 2 columns on tablets */
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  body {
-    padding: 1rem;
-  }
-  .kanban-board {
-    /* Stack to 1 column on mobile */
-    grid-template-columns: 1fr;
-  }
-}
-
-/* --- Book Detail Page Styles --- */
-.back-link {
-  display: inline-block;
-  margin-bottom: 2rem;
-  font-weight: 600;
-}
-
-.book-detail-layout {
-  display: grid;
-  grid-template-columns: 1fr 2fr; /* 1 part for image, 2 parts for info */
-  gap: 3rem;
-  align-items: start;
-}
-
-.book-cover img {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.book-info h1 {
-  margin-top: 0;
-  font-size: 2.5rem;
-  line-height: 1.2;
-}
-
-.book-info h2 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  font-weight: 400;
-  font-size: 1.5rem;
-  color: #6c757d;
-}
-
-.book-meta {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-}
-
-.book-meta p {
-  margin: 0.5rem 0;
-}
-
-.book-review {
-  margin-bottom: 2rem;
-}
-
-/* --- Action Button Styles --- */
-.action-buttons {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
+  flex-direction: column;
 }
-
-.action-buttons .btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
+.kanban-head {
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.kanban-head h3 {
+  margin: 0;
+}
+.kanban-head .count {
   font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+.kanban-cards {
+  position: relative;
+  overflow-y: auto;
+  max-height: 65vh;
+  padding: 4px;
+  margin: -4px; /* For scrollbar spacing */
+}
+.kanban-cards::-webkit-scrollbar {
+  width: 6px;
+}
+.kanban-cards::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+.kanban-cards::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, hsla(0, 0%, 100%, 0), var(--surface));
+  pointer-events: none;
+  z-index: 1;
+}
+.kanban-foot {
+  margin-top: auto;
+  padding-top: 1rem;
   text-align: center;
 }
 
-.btn-primary {
-  background-color: var(--link-color);
-  color: white;
-}
-.btn-primary:hover {
+/* Book Card (Dashboard) */
+.book-card-link {
+  display: block;
   text-decoration: none;
-  opacity: 0.9;
+  color: inherit;
+}
+.book-card-link:hover {
+  text-decoration: none;
+}
+.book-card {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  transition: all 0.15s ease;
+}
+.book-card-link:hover .book-card {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+.book-card img {
+  width: 70px;
+  height: 105px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
+}
+.book-card .title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+.book-card .author {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 8px 0;
+}
+.chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.chip {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 500;
+}
+.chip.rating-chip {
+  color: #b45309;
+  background-color: #fef3c7;
+  border-color: #fde68a;
+  font-weight: 600;
 }
 
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
+/* --- Book Detail Page --- */
+.back-link {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
 }
-.btn-danger:hover {
-  opacity: 0.9;
+.book-detail-layout {
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+.detail-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.book-cover img {
+  width: 75%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+.book-info h1 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+.book-info .subtitle {
+  color: var(--muted);
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.pill {
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.pill.status-read {
+  background-color: var(--status-read);
+  color: var(--status-read-text);
+}
+.pill.status-want-to-read {
+  background-color: var(--status-want);
+  color: var(--status-want-text);
+}
+.pill.status-currently-reading {
+  background-color: var(--status-current);
+  color: var(--status-current-text);
+}
+.pill.status-unfinished {
+  background-color: var(--status-unfinished);
+  color: var(--status-unfinished-text);
+}
+.rating-bar {
+  width: 100%;
+  background-color: var(--border);
+  height: 8px;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.rating-bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #f4ce74, #dda84a);
+}
+.section {
+  margin-bottom: 1.5rem;
+}
+.section h3 {
+  margin: 0 0 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+.section p {
+  margin: 0;
+}
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 2rem;
 }
 
-/* --- Responsive for Detail Page --- */
+/* --- Form & Error Styles --- */
+.form-container {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--surface-2);
+}
+.error-list {
+  list-style: none;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: #fde8ea;
+  border: 1px solid #f5c2c7;
+  color: #7a1530;
+  border-radius: 10px;
+}
+.error-container {
+  text-align: center;
+  padding-top: 10vh;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .kanban-board {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 @media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+  .kanban-board,
   .book-detail-layout {
-    /* Stack columns on smaller screens */
     grid-template-columns: 1fr;
-    gap: 2rem;
   }
-
-  .book-cover {
-    text-align: center; /* Center the image when stacked */
-  }
-
-  .book-info h1 {
-    font-size: 2rem;
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 }
