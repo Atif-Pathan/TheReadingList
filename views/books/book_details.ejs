@@ -10,66 +10,68 @@
     <div class="container">
       <a href="/dashboard" class="back-link">← Back to Overview</a>
 
-      <div class="book-detail-layout">
-        <div class="detail-left-col">
-          <div class="book-cover">
-            <img
-              src="<%= book.cover_image_url %>"
-              alt="Cover of <%= book.title %>"
-            />
-          </div>
-          <div class="section">
-            <h3>Summary</h3>
-            <p><%= book.summary || 'No summary has been added yet.' %></p>
-          </div>
+      <!-- Top hero section: cover + main info -->
+      <section class="book-hero">
+        <div class="hero-cover">
+          <img
+            src="<%= book.cover_image_url %>"
+            alt="Cover of <%= book.title %>"
+          />
         </div>
 
-        <div class="book-info">
-          <span
-            class="pill status-<%= book.category_name.toLowerCase().replace(/\s+/g,'-') %>"
-          >
-            <%= book.category_name %>
-          </span>
+        <div class="hero-body">
+          <div class="hero-top">
+            <span
+              class="pill status-<%= (book.category_name || '') .toLowerCase() .replace(/\s+/g, '-') %>"
+              ><%= book.category_name %></span
+            >
 
-          <h1><%= book.title %></h1>
+            <% if (book.rating != null) { %>
+            <span class="chip rating-chip hero-rating-chip">
+              ★ <%= book.rating %>/10
+            </span>
+            <% } %>
+          </div>
+
+          <h1 class="book-title"><%= book.title %></h1>
           <h2 class="subtitle">by <%= book.author %></h2>
 
-          <% if (book.rating != null) { %>
-          <div class="section">
-            <h3>My Rating: <%= book.rating %> / 10</h3>
-            <div class="rating-bar">
-              <span style="width: <%= book.rating * 10 + '%' %>"></span>
-            </div>
+          <% if (book.genre) { %>
+          <div class="chips hero-genres">
+            <% book.genre.split(',').forEach((g) => { %>
+            <span class="chip"><%= g.trim() %></span>
+            <% }) %>
           </div>
           <% } %>
 
-          <div class="section">
-            <h3>Genre</h3>
-            <p>
-              <%= book.genre ? book.genre.split(',').map(g=>g.trim()).join(', ')
-              : 'Not specified' %>
-            </p>
+          <div class="hero-summary">
+            <h3>Summary</h3>
+            <p><%= book.summary || 'No summary has been added yet.' %></p>
           </div>
 
-          <div class="section">
-            <h3>My Notes</h3>
-            <p><%= book.review || 'No notes yet.' %></p>
-          </div>
-
-          <div class="action-buttons">
+          <!-- Absolutely positioned actions in top-right -->
+          <div class="action-buttons hero-actions">
             <a href="/books/<%= book.id %>/edit" class="btn btn-primary"
               >Edit Book</a
             >
             <form
+              class="hero-action-form"
               action="/books/<%= book.id %>/delete"
               method="POST"
-              style="display: inline"
             >
               <button type="submit" class="btn btn-danger">Delete Book</button>
             </form>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- Bottom centered stack: notes only (rating bar removed) -->
+      <section class="book-bottom">
+        <div class="section center-card">
+          <h3>My Notes</h3>
+          <p><%= book.review || 'No notes yet.' %></p>
+        </div>
+      </section>
     </div>
   </body>
 </html>

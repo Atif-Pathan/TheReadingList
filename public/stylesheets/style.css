@@ -1,4 +1,4 @@
-/* public/stylesheets/style.css (Complete & Fixed Version) */
+/* public/stylesheets/style.css */
 
 /* --- Fonts & Theme --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap');
@@ -6,15 +6,21 @@
 :root {
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Literata', serif;
+
   --bg: #fbfaf7;
   --surface: #ffffff;
   --surface-2: #f8f6f2;
   --text: #2c2828;
   --muted: #6b7280;
   --border: #e7e2d9;
+
   --accent: #2f7a7b;
   --accent-contrast: #ffffff;
+  --accent-soft: #e6f3f2;
+
   --danger: #d64545;
+
+  /* Status colors */
   --status-read: #e6f3f2;
   --status-read-text: #2b5560;
   --status-want: #fef3e6;
@@ -23,6 +29,7 @@
   --status-current-text: #433f7a;
   --status-unfinished: #f5e9e8;
   --status-unfinished-text: #7a3f3f;
+
   --radius: 12px;
   --shadow-sm: 0 1px 2px rgba(20, 20, 20, 0.04);
   --shadow-md: 0 4px 12px rgba(20, 20, 20, 0.08);
@@ -34,6 +41,7 @@
 *::after {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   padding: 2rem;
@@ -42,16 +50,20 @@ body {
   background-color: var(--bg);
   line-height: 1.6;
 }
+
 h1,
 h2,
 h3 {
   font-family: var(--font-serif);
   font-weight: 700;
+  margin: 0 0 0.5rem 0;
 }
+
 a {
   color: var(--accent);
   text-decoration: none;
 }
+
 a:hover {
   text-decoration: underline;
 }
@@ -62,6 +74,7 @@ a:hover {
   margin: 0 auto;
   padding: 0 1rem;
 }
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -75,17 +88,21 @@ a:hover {
   font-weight: 600;
   box-shadow: var(--shadow-sm);
   transition: all 0.15s ease;
+  min-height: 40px;
 }
+
 .btn:hover {
   text-decoration: none;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
+
 .btn-primary {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-contrast);
 }
+
 .btn-danger {
   background: var(--danger);
   border-color: var(--danger);
@@ -97,6 +114,7 @@ a:hover {
   text-align: center;
   padding-top: 10vh;
 }
+
 .welcome-container .btn-primary {
   margin-top: 1rem;
 }
@@ -108,18 +126,22 @@ a:hover {
   justify-content: space-between;
   margin-bottom: 1rem;
 }
+
 .dashboard-header h1 {
   margin: 0;
 }
+
 .actions {
   display: flex;
   gap: 12px;
 }
+
 .kanban-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
+
 .kanban-column {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -129,6 +151,7 @@ a:hover {
   display: flex;
   flex-direction: column;
 }
+
 .kanban-head {
   padding-bottom: 0.25rem;
   margin-bottom: 0.75rem;
@@ -137,9 +160,11 @@ a:hover {
   align-items: baseline;
   justify-content: space-between;
 }
-.kanban-head h3 {
+
+.kanban-head h2 {
   margin: 0;
 }
+
 .kanban-head .count {
   font-size: 1rem;
   font-weight: 700;
@@ -148,20 +173,24 @@ a:hover {
   padding: 2px 8px;
   border-radius: 99px;
 }
+
 .kanban-cards {
   position: relative;
   overflow-y: auto;
   max-height: 65vh;
   padding: 4px;
-  margin: -4px; /* For scrollbar spacing */
+  margin: -4px;
 }
+
 .kanban-cards::-webkit-scrollbar {
   width: 6px;
 }
+
 .kanban-cards::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 3px;
 }
+
 .kanban-cards::after {
   content: '';
   position: absolute;
@@ -169,10 +198,15 @@ a:hover {
   left: 0;
   right: 0;
   height: 60px;
-  background: linear-gradient(to bottom, hsla(0, 0%, 100%, 0), var(--surface));
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    var(--surface)
+  );
   pointer-events: none;
   z-index: 1;
 }
+
 .kanban-foot {
   margin-top: auto;
   padding-top: 1rem;
@@ -185,9 +219,11 @@ a:hover {
   text-decoration: none;
   color: inherit;
 }
+
 .book-card-link:hover {
   text-decoration: none;
 }
+
 .book-card {
   display: grid;
   grid-template-columns: 70px 1fr;
@@ -200,11 +236,13 @@ a:hover {
   border: 1px solid var(--border);
   transition: all 0.15s ease;
 }
+
 .book-card-link:hover .book-card {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
   border-color: var(--accent);
 }
+
 .book-card img {
   width: 70px;
   height: 105px;
@@ -212,22 +250,26 @@ a:hover {
   border-radius: 6px;
   box-shadow: var(--shadow-sm);
 }
+
 .book-card .title {
   font-weight: 600;
   font-size: 1.05rem;
   margin: 0 0 4px 0;
   line-height: 1.3;
 }
+
 .book-card .author {
   color: var(--muted);
   font-size: 0.9rem;
   margin: 0 0 8px 0;
 }
+
 .chips {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
 }
+
 .chip {
   font-size: 0.75rem;
   padding: 3px 8px;
@@ -237,6 +279,7 @@ a:hover {
   color: var(--muted);
   font-weight: 500;
 }
+
 .chip.rating-chip {
   color: #b45309;
   background-color: #fef3c7;
@@ -244,95 +287,135 @@ a:hover {
   font-weight: 600;
 }
 
-/* --- Book Detail Page --- */
+/* --- Book Details (Hero layout) --- */
+
 .back-link {
   display: inline-flex;
   gap: 8px;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem; /* extra spacing as requested */
   font-weight: 600;
 }
-.book-detail-layout {
+
+/* Constrain book detail width to a comfortable measure */
+.book-hero,
+.book-bottom {
+  max-width: 980px;
+  /* margin: 0 auto 2rem auto; */
+}
+
+.book-hero {
   display: grid;
-  grid-template-columns: 2fr 5fr;
-  gap: 2.5rem;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
   align-items: start;
 }
-.detail-left-col {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-.book-cover img {
-  width: 75%;
+
+.hero-cover img {
+  width: 100%;
   height: auto;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
 }
-.book-info h1 {
-  font-size: 2.25rem;
+
+.hero-body {
+  position: relative; /* for absolute action buttons */
+}
+
+.hero-body .book-title {
+  margin: 0.25rem 0 0.25rem 0;
+  font-size: 2rem;
   line-height: 1.2;
 }
-.book-info .subtitle {
-  color: var(--muted);
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
+
+.hero-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
+
+.hero-rating-chip {
+  font-weight: 700;
+}
+
+.hero-genres {
+  margin: 0.25rem 0 1rem 0;
+}
+
+.hero-summary h3 {
+  margin: 0 0 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+
+/* Absolutely positioned Edit/Delete */
+.hero-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  align-items: center;
+  z-index: 2;
+}
+
+.hero-action-form {
+  margin: 0; /* ensure no default margins */
+}
+
+.hero-actions .btn {
+  min-width: 120px; /* make both buttons visually balanced */
+}
+
+/* Status pill styles */
 .pill {
   padding: 6px 12px;
   border-radius: 99px;
   font-size: 0.9rem;
   font-weight: 600;
 }
+
 .pill.status-read {
   background-color: var(--status-read);
   color: var(--status-read-text);
 }
+
 .pill.status-want-to-read {
   background-color: var(--status-want);
   color: var(--status-want-text);
 }
+
 .pill.status-currently-reading {
   background-color: var(--status-current);
   color: var(--status-current-text);
 }
+
 .pill.status-unfinished {
   background-color: var(--status-unfinished);
   color: var(--status-unfinished-text);
 }
-.rating-bar {
-  width: 100%;
-  background-color: var(--border);
-  height: 8px;
-  border-radius: 99px;
-  overflow: hidden;
-}
-.rating-bar > span {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, #f4ce74, #dda84a);
-}
-.section {
-  margin-bottom: 1.5rem;
-}
-.section h3 {
-  margin: 0 0 0.5rem 0;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5rem;
-}
-.section p {
-  margin: 0;
-}
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-top: 2rem;
+
+/* Notes section (centered, same width as hero) */
+.book-bottom {
+  margin-top: 1.5rem;
+  /* already constrained via max-width above */
 }
 
-/* --- Form & Error Styles --- */
+.center-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+/* --- Forms & Errors --- */
 .form-container {
   max-width: 640px;
   margin: 2rem auto;
@@ -342,14 +425,17 @@ a:hover {
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
 }
+
 .form-group {
   margin-bottom: 1.5rem;
 }
+
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
+
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -361,6 +447,7 @@ a:hover {
   font-family: inherit;
   background: var(--surface-2);
 }
+
 .error-list {
   list-style: none;
   padding: 1rem;
@@ -370,6 +457,7 @@ a:hover {
   color: #7a1530;
   border-radius: 10px;
 }
+
 .error-container {
   text-align: center;
   padding-top: 10vh;
@@ -381,17 +469,41 @@ a:hover {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 @media (max-width: 768px) {
   body {
     padding: 1rem;
   }
-  .kanban-board,
-  .book-detail-layout {
+
+  .kanban-board {
     grid-template-columns: 1fr;
   }
+
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .book-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-cover {
+    max-width: 320px;
+  }
+
+  .hero-cover img {
+    margin: 0 auto;
+    display: block;
+  }
+
+  .hero-body {
+    padding-right: 0; /* let actions flow inline on small screens */
+  }
+
+  .hero-actions {
+    position: static;
+    margin-top: 0.75rem;
   }
 }
