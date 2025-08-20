@@ -8,45 +8,62 @@
   </head>
   <body>
     <div class="container">
-      <div class="dashboard-header">
-        <h1>My Dashboard</h1>
-        <div>
-          <button>
-            <a href="/categories/new"> + New Category</a>
-          </button>
-          <button>
-            <a href="/books/new">+ New Book</a>
-          </button>
+      <header class="dashboard-header">
+        <h1>My Reading List</h1>
+        <div class="actions">
+          <a href="/categories/new" class="btn">+ New Category</a>
+          <a href="/books/new" class="btn btn-primary">+ New Book</a>
         </div>
-      </div>
+      </header>
 
-      <div class="kanban-board">
-        <!-- Loop through each category to create a column -->
-        <% categories.forEach(category => { %>
-        <div class="kanban-column">
-          <h2><%= category.name %></h2>
+      <main class="kanban-board">
+        <% categories.forEach((category) => { %> <% const booksInCategory =
+        books.filter((b) => b.category_id === category.id); %>
+        <section class="kanban-column">
+          <header class="kanban-head">
+            <h3><%= category.name %></h3>
+            <span class="count"><%= booksInCategory.length %></span>
+          </header>
 
-          <!-- Filter and then loop through only the books for this category -->
-          <% const booksInCategory = books.filter(book => book.category_id ===
-          category.id); %> <% if (booksInCategory.length > 0) { %> <%
-          booksInCategory.forEach(book => { %>
-          <!-- Each book is a clickable link to its future detail page -->
-          <a href="/books/<%= book.id %>">
-            <div class="book-card">
-              <img
-                src="<%= book.cover_image_url %>"
-                alt="Cover of <%= book.title %>"
-              />
-              <h3><%= book.title %></h3>
-              <p><%= book.author %></p>
-            </div>
-          </a>
-          <% }); %> <% } else { %>
-          <p>No books in this category yet.</p>
-          <% } %>
-        </div>
-        <% }); %>
-      </div>
+          <div class="kanban-cards">
+            <% if (booksInCategory.length) { %> <%
+            booksInCategory.forEach((book) => { %>
+            <a href="/books/<%= book.id %>" class="book-card-link">
+              <div class="book-card">
+                <img
+                  src="<%= book.cover_image_url %>"
+                  alt="Cover of <%= book.title %>"
+                  loading="lazy"
+                />
+                <div>
+                  <h4 class="title"><%= book.title %></h4>
+                  <p class="author"><%= book.author %></p>
+                  <div class="chips">
+                    <% if (book.rating !== null) { %>
+                    <span class="chip rating-chip"
+                      >★ <%= book.rating %>/10</span
+                    >
+                    <% } %> <% if (book.genre) { %> <%
+                    book.genre.split(',').forEach((g) => { %>
+                    <span class="chip"><%= g.trim() %></span>
+                    <% }) %> <% } %>
+                  </div>
+                </div>
+              </div>
+            </a>
+            <% }) %> <% } else { %>
+            <p class="author" style="padding: 12px">No books here yet.</p>
+            <% } %>
+          </div>
+
+          <footer class="kanban-foot">
+            <a href="/categories/<%= category.id %>" class="btn"
+              >View all in this list</a
+            >
+          </footer>
+        </section>
+        <% }) %>
+      </main>
     </div>
   </body>
 </html>

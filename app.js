@@ -19,6 +19,24 @@ app.set('view engine', 'ejs');
 app.use('/', indexRouter);
 app.use('/books', bookRouter);
 
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  // Set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // Render the error page
+  res.status(err.status || 500);
+  res.render('error'); // Renders views/error.ejs
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(
