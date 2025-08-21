@@ -21,15 +21,42 @@ async function getAllCategories() {
   }
 }
 
+async function getCategoryById(id) {
+  try {
+    const { rows } = await pool.query(
+      'SELECT * FROM categories WHERE id = $1',
+      [id],
+    );
+    return rows[0];
+  } catch (err) {
+    console.error('Error fetching category by id:', err.stack);
+    throw err;
+  }
+}
+
+async function getBooksByCategoryId(categoryId) {
+  try {
+    const { rows } = await pool.query(
+      `SELECT *
+       FROM books
+       WHERE category_id = $1
+       ORDER BY created_at DESC`,
+      [categoryId],
+    );
+    return rows;
+  } catch (err) {
+    console.error('Error fetching books by category id:', err.stack);
+    throw err;
+  }
+}
+
 async function getBookById(id) {
   try {
     const { rows } = await pool.query(
-      `SELECT
-         books.*,
-         categories.name AS category_name
-       FROM books
-       JOIN categories ON books.category_id = categories.id
-       WHERE books.id = $1`,
+      `SELECT b.*, c.name AS category_name
+       FROM books b
+       JOIN categories c ON b.category_id = c.id
+       WHERE b.id = $1`,
       [id],
     );
     return rows[0];
@@ -40,18 +67,51 @@ async function getBookById(id) {
 }
 
 async function insertBook(book) {
-  const { title, author, cover_image_url, genre, rating, review, category_id } =
-    book;
+  const {
+    title,
+    author,
+    cover_image_url,
+    summary,
+    genre,
+    rating,
+    review,
+    category_id,
+  } = book;
   try {
     const { rows } = await pool.query(
-      `INSERT INTO books (title, author, cover_image_url, genre, rating, review, category_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING id`, // RETURNING id is useful to get the new book's ID
-      [title, author, cover_image_url, genre, rating, review, category_id],
+      `INSERT INTO books
+        (title, author, cover_image_url, summary, genre, rating, review, category_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING id`,
+      [
+        title,
+        author,
+        cover_image_url || null,
+        summary || null,
+        genre || null,
+        rating ?? null,
+        review || null,
+        category_id,
+      ],
     );
-    return rows[0]; // Returns { id: new_book_id }
+    return rows[0];
   } catch (err) {
     console.error('Error inserting book:', err.stack);
+    throw err;
+  }
+}
+
+async function insertCategory({ name, description }) {
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO categories (name, description)
+       VALUES ($1, $2)
+       RETURNING id`,
+      [name, description || null],
+    );
+    return rows[0];
+  } catch (err) {
+    console.error('Error inserting category:', err.stack);
     throw err;
   }
 }
@@ -59,6 +119,9 @@ async function insertBook(book) {
 module.exports = {
   getAllBooks,
   getAllCategories,
+  getCategoryById,
+  getBooksByCategoryId,
   getBookById,
   insertBook,
+  insertCategory,
 };
