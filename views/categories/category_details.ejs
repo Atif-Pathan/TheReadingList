@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title><%= title %> · The Reading List</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <a href="/dashboard" class="back-link">← Back to Overview</a>
+
+      <header class="category-header">
+        <div>
+          <h1><%= category.name %></h1>
+          <% if (category.description) { %>
+          <p class="category-desc"><%= category.description %></p>
+          <% } %>
+        </div>
+        <div class="category-actions">
+          <a href="/books/new" class="btn btn-primary">+ Add Book</a>
+        </div>
+      </header>
+
+      <section class="category-table">
+        <div class="category-table-head">
+          <div class="th cover">Cover</div>
+          <div class="th title">Title & Author</div>
+          <div class="th rating">Rating</div>
+          <div class="th genres">Genres</div>
+          <div class="th added">Added</div>
+        </div>
+
+        <div class="category-table-body">
+          <% if (books.length) { %> <% books.forEach((book) => { %>
+          <a href="/books/<%= book.id %>" class="category-row-link">
+            <div class="category-row">
+              <div class="cell cover">
+                <img
+                  src="<%= book.cover_image_url %>"
+                  alt="Cover of <%= book.title %>"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="cell title">
+                <div class="title-text"><%= book.title %></div>
+                <div class="author-text"><%= book.author %></div>
+              </div>
+
+              <div class="cell rating">
+                <% if (book.rating !== null) { %>
+                <span class="chip rating-chip">★ <%= book.rating %>/10</span>
+                <% } else { %>
+                <span class="muted">—</span>
+                <% } %>
+              </div>
+
+              <div class="cell genres">
+                <% if (book.genre) { %>
+                <div class="chips">
+                  <% book.genre.split(",").forEach((g) => { %>
+                  <span class="chip"><%= g.trim() %></span>
+                  <% }) %>
+                </div>
+                <% } else { %>
+                <span class="muted">—</span>
+                <% } %>
+              </div>
+
+              <div class="cell added">
+                <%= new Date(book.created_at).toLocaleDateString() %>
+              </div>
+            </div>
+          </a>
+          <% }) %> <% } else { %>
+          <div class="category-empty">No books found in this category yet.</div>
+          <% } %>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
