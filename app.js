@@ -5,6 +5,7 @@ const path = require('path');
 const app = express();
 const indexRouter = require('./routes/indexRoutes');
 const bookRouter = require('./routes/bookRoutes');
+const categoryRouter = require('./routes/categoryRoutes');
 
 // mount the styles which will be in the public folder
 const assetsPath = path.join(__dirname, 'public');
@@ -18,6 +19,7 @@ app.set('view engine', 'ejs');
 
 app.use('/', indexRouter);
 app.use('/books', bookRouter);
+app.use('/categories', categoryRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
