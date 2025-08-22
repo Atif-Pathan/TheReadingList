@@ -1,55 +1,33 @@
-// categoryController.js
+// controllers/categoryController.js
 const db = require('../db/queries');
 const { body, validationResult } = require('express-validator');
 
-// --- Validation Rules ---
-// This is an array of middleware that will be used by the POST route.
 const validateCategory = [
-  body(
-    'name',
-    'Category name is required and must be between 1 and 100 characters.',
-  )
+  body('name', 'Category name must be 1–100 characters.')
     .trim()
     .isLength({ min: 1, max: 100 })
     .escape(),
-
-  body('description', 'Description must be less than 500 characters.')
+  body('description', 'Description must be <= 500 characters.')
     .optional({ checkFalsy: true })
     .trim()
     .isLength({ max: 500 })
     .escape(),
 ];
 
-// --- Controller Functions ---
 // GET /categories/:id
 exports.getCategory = async (req, res, next) => {
   try {
-    const categoryId = req.params.id;
-    const category = await db.getCategoryById(categoryId);
+    const category = await db.getCategoryById(req.params.id);
     if (!category) {
-      return res.status(404).render('error', {
-        message: 'Category not found',
-        error: {},
-      });
+      const err = new Error('Category not found');
+      err.status = 404;
+      return next(err); // Use the global error handler
     }
-    const books = await db.getBooksByCategoryId(categoryId);
+    const books = await db.getBooksByCategoryId(req.params.id);
     res.render('categories/category_details', {
-      title: `${category.name}`,
+      title: category.name,
       category,
       books,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// GET /categories/new
-exports.createCategoryGet = async (req, res, next) => {
-  try {
-    res.render('categories/category_form', {
-      title: 'New Category',
-      category: {},
-      errors: [],
     });
   } catch (error) {
     next(error);
@@ -62,35 +40,94 @@ exports.createCategoryPost = [
   async (req, res, next) => {
     try {
       const errors = validationResult(req);
-      const categoryData = {
-        name: req.body.name,
-        description: req.body.description,
-      };
+      const { name, description } = req.body;
 
       if (!errors.isEmpty()) {
-        return res.status(400).render('categories/category_form', {
-          title: 'New Category',
-          category: categoryData,
-          errors: errors.array(),
-        });
+        const errorMessages = errors.array().map((e) => e.msg);
+        const queryParams = new URLSearchParams({
+          error: errorMessages.join('; '),
+          oldName: name,
+          oldDesc: description,
+        }).toString();
+        // Redirect back to the dashboard with errors in the URL
+        return res.redirect(`/dashboard?${queryParams}#category-form-wrapper`);
       }
 
-      try {
-        const newCat = await db.insertCategory(categoryData);
-        return res.redirect(`/categories/${newCat.id}`);
-      } catch (err) {
-        // Handle unique violation (duplicate name)
-        if (err && err.code === '23505') {
-          return res.status(400).render('categories/category_form', {
-            title: 'New Category',
-            category: categoryData,
-            errors: [{ msg: 'A category with this name already exists.' }],
-          });
-        }
-        throw err;
-      }
+      await db.insertCategory({ name, description });
+      res.redirect('/dashboard');
     } catch (error) {
+      // Handle unique name constraint from DB
+      if (error.code === '23505') {
+        const queryParams = new URLSearchParams({
+          error: 'A category with this name already exists.',
+          oldName: req.body.name,
+          oldDesc: req.body.description,
+        }).toString();
+        return res.redirect(`/dashboard?${queryParams}#category-form-wrapper`);
+      }
       next(error);
     }
   },
 ];
+
+// POST /categories/:id/edit
+exports.editCategoryPost = [
+  ...validateCategory,
+  async (req, res, next) => {
+    const categoryId = req.params.id;
+    try {
+      const errors = validationResult(req);
+      const { name, description } = req.body;
+
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((e) => e.msg);
+        const queryParams = new URLSearchParams({
+          error: errorMessages.join('; '),
+          oldName: name,
+          oldDesc: description,
+        }).toString();
+        // Redirect back to the category page with errors in the URL
+        return res.redirect(
+          `/categories/${categoryId}?${queryParams}#category-form-wrapper`,
+        );
+      }
+
+      await db.updateCategory(categoryId, { name, description });
+      res.redirect(`/categories/${categoryId}`);
+    } catch (error) {
+      if (error.code === '23505') {
+        const queryParams = new URLSearchParams({
+          error: 'A category with this name already exists.',
+          oldName: req.body.name,
+          oldDesc: req.body.description,
+        }).toString();
+        return res.redirect(
+          `/categories/${categoryId}?${queryParams}#category-form-wrapper`,
+        );
+      }
+      next(error);
+    }
+  },
+];
+
+// POST /categories/:id/delete
+exports.deleteCategoryPost = async (req, res, next) => {
+  try {
+    const fromId = parseInt(req.params.id, 10);
+    const archiveCategory = await db.findOrCreateCategoryByName('Archive');
+
+    if (fromId === archiveCategory.id) {
+      // This is a server-level rule violation, not a validation error.
+      // Create an error and pass it to the global error handler.
+      const err = new Error('The "Archive" category cannot be deleted.');
+      err.status = 400; // Bad Request
+      return next(err);
+    }
+
+    await db.moveBooksToCategory(fromId, archiveCategory.id);
+    await db.deleteCategory(fromId);
+    res.redirect('/dashboard');
+  } catch (error) {
+    next(error);
+  }
+};

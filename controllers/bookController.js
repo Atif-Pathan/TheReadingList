@@ -1,6 +1,6 @@
 // bookController.js
 const db = require('../db/queries');
-const { body, validationResult, query } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 // --- Validation Rules ---
 // This is an array of middleware that will be used by the POST route.
@@ -57,13 +57,14 @@ exports.getBook = async (req, res, next) => {
 
 exports.createBookGet = async (req, res, next) => {
   try {
-    // We need to fetch categories to populate the dropdown in the form
     const categories = await db.getAllCategories();
+    const selectedCategoryId = req.query.category_id || null;
+
     res.render('books/book_form', {
       title: 'Add New Book',
-      categories: categories,
-      book: {}, // Pass an empty book object for the form
-      errors: [], // Pass an empty errors array
+      categories,
+      book: { category_id: selectedCategoryId },
+      errors: [],
     });
   } catch (error) {
     next(error);
