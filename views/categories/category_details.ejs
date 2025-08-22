@@ -18,9 +18,24 @@
           <% } %>
         </div>
         <div class="category-actions">
-          <a href="/books/new" class="btn btn-primary">+ Add Book</a>
+          <button id="show-edit-category-form" class="btn">Edit</button>
+          <form
+            action="/categories/<%= category.id %>/delete"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+          <a
+            href="/books/new?category_id=<%= category.id %>"
+            class="btn btn-primary"
+          >
+            + Add Book
+          </a>
         </div>
       </header>
+
+      <%- include('../partials/category_quick_form') %>
 
       <section class="category-table">
         <div class="category-table-head">
@@ -79,5 +94,45 @@
         </div>
       </section>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const formWrapper = document.getElementById('category-form-wrapper');
+        const form = document.getElementById('category-form');
+        const formTitle = document.getElementById('category-form-title');
+        const formSubmit = document.getElementById('category-form-submit');
+        const showButton = document.getElementById('show-edit-category-form');
+        const cancelButton = document.getElementById('cancel-category-form');
+        const nameInput = document.getElementById('category-name');
+        const descInput = document.getElementById('category-description');
+        const errorContainer = document.getElementById('form-error-container');
+
+        const showForm = () => {
+          formTitle.textContent = 'Edit Category';
+          formSubmit.textContent = 'Update Category';
+          form.action = `/categories/<%= category.id %>/edit`;
+          nameInput.value = `<%= category.name.replace(/'/g, "\\'") %>`;
+          descInput.value = `<%= category.description ? category.description.replace(/'/g, "\\'") : '' %>`;
+          formWrapper.classList.remove('hidden');
+        };
+        const hideForm = () => formWrapper.classList.add('hidden');
+
+        showButton.addEventListener('click', showForm);
+        cancelButton.addEventListener('click', hideForm);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+          const errorList = document.createElement('ul');
+          errorList.className = 'error-list';
+          error.split(';').forEach((msg) => {
+            const li = document.createElement('li');
+            li.textContent = msg.trim();
+            errorList.appendChild(li);
+          });
+          errorContainer.appendChild(errorList);
+          showForm(); // Show the edit form if there was an error
+        }
+      });
+    </script>
   </body>
 </html>

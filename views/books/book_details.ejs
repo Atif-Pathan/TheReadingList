@@ -23,10 +23,12 @@
 
         <div class="hero-body">
           <div class="hero-top">
-            <span
-              class="pill status-<%= (book.category_name || '') .toLowerCase() .replace(/\s+/g, '-') %>"
-              ><%= book.category_name %></span
-            >
+            <% const slug = (book.category_name ||
+            '').toLowerCase().replace(/\s+/g, '-'); const known = ['read',
+            'want-to-read', 'currently-reading', 'archive']; const pillClass =
+            known.includes(slug) ? `status-${slug}` :
+            `status-generic-${((book.category_id % 6) || 0) + 1}`; %>
+            <span class="pill <%= pillClass %>"><%= book.category_name %></span>
 
             <% if (book.rating != null) { %>
             <span class="chip rating-chip hero-rating-chip">

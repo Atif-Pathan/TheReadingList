@@ -1,0 +1,42 @@
+<!-- views/partials/category_quick_form.ejs -->
+<div id="category-form-wrapper" class="form-wrapper hidden">
+  <div class="form-container">
+    <div class="form-header">
+      <h2 id="category-form-title">New Category</h2>
+      <button
+        id="cancel-category-form"
+        class="btn-close"
+        aria-label="Close form"
+      >
+        &times;
+      </button>
+    </div>
+
+    <!-- This is where validation errors will be injected by JavaScript -->
+    <div id="form-error-container"></div>
+
+    <form
+      id="category-form"
+      action="/categories/new"
+      method="POST"
+      class="quick-category-form"
+    >
+      <div class="form-group">
+        <label for="category-name">Category Name*</label>
+        <input type="text" id="category-name" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="category-description">Description</label>
+        <input
+          type="text"
+          id="category-description"
+          name="description"
+          placeholder="Optional"
+        />
+      </div>
+      <button id="category-form-submit" type="submit" class="btn btn-primary">
+        Create
+      </button>
+    </form>
+  </div>
+</div>

@@ -11,10 +11,14 @@
       <header class="dashboard-header">
         <h1>My Reading List</h1>
         <div class="actions">
-          <a href="/categories/new" class="btn">+ New Category</a>
+          <button id="show-new-category-form" class="btn">
+            + New Category
+          </button>
           <a href="/books/new" class="btn btn-primary">+ New Book</a>
         </div>
       </header>
+
+      <%- include('../partials/category_quick_form') %>
 
       <main class="kanban-board">
         <% categories.forEach((category) => { %> <% const booksInCategory =
@@ -65,5 +69,37 @@
         <% }) %>
       </main>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const formWrapper = document.getElementById('category-form-wrapper');
+        const showButton = document.getElementById('show-new-category-form');
+        const cancelButton = document.getElementById('cancel-category-form');
+        const nameInput = document.getElementById('category-name');
+        const descInput = document.getElementById('category-description');
+        const errorContainer = document.getElementById('form-error-container');
+
+        const showForm = () => formWrapper.classList.remove('hidden');
+        const hideForm = () => formWrapper.classList.add('hidden');
+
+        showButton.addEventListener('click', showForm);
+        cancelButton.addEventListener('click', hideForm);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+          const errorList = document.createElement('ul');
+          errorList.className = 'error-list';
+          error.split(';').forEach((msg) => {
+            const li = document.createElement('li');
+            li.textContent = msg.trim();
+            errorList.appendChild(li);
+          });
+          errorContainer.appendChild(errorList);
+          nameInput.value = urlParams.get('oldName') || '';
+          descInput.value = urlParams.get('oldDesc') || '';
+          showForm();
+        }
+      });
+    </script>
   </body>
 </html>
