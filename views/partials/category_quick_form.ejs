@@ -3,18 +3,7 @@
   <div class="form-container">
     <div class="form-header">
       <h2 id="category-form-title">New Category</h2>
-      <button
-        id="cancel-category-form"
-        class="btn-close"
-        aria-label="Close form"
-      >
-        &times;
-      </button>
     </div>
-
-    <!-- This is where validation errors will be injected by JavaScript -->
-    <div id="form-error-container"></div>
-
     <form
       id="category-form"
       action="/categories/new"
@@ -34,9 +23,21 @@
           placeholder="Optional"
         />
       </div>
+      <div class="form-group">
+        <label for="category-password">Admin Password*</label>
+        <input
+          type="password"
+          id="category-password"
+          name="password"
+          required
+        />
+      </div>
       <button id="category-form-submit" type="submit" class="btn btn-primary">
         Create
       </button>
     </form>
+    <button id="cancel-category-form" class="btn-close" aria-label="Close form">
+      &times;
+    </button>
   </div>
 </div>

@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="container">
-      <a href="/dashboard" class="back-link">← Back to Overview</a>
+      <a href="/dashboard" class="back-link">&larr; Back to Dashboard</a>
 
       <header class="category-header">
         <div>
@@ -19,13 +19,9 @@
         </div>
         <div class="category-actions">
           <button id="show-edit-category-form" class="btn">Edit</button>
-          <form
-            action="/categories/<%= category.id %>/delete"
-            method="POST"
-            style="display: inline"
-          >
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
+          <button type="button" id="delete-button" class="btn btn-danger">
+            Delete
+          </button>
           <a
             href="/books/new?category_id=<%= category.id %>"
             class="btn btn-primary"
@@ -35,6 +31,11 @@
         </div>
       </header>
 
+      <div id="form-error-container">
+        <button id="close-error" class="btn-close" aria-label="Close form">
+          &times;
+        </button>
+      </div>
       <%- include('../partials/category_quick_form') %>
 
       <section class="category-table">
@@ -94,6 +95,30 @@
         </div>
       </section>
     </div>
+    <form
+      id="delete-modal"
+      class="modal hidden"
+      action="/categories/<%= category.id %>/delete"
+      method="POST"
+    >
+      <div class="modal-content">
+        <h2>Confirm Delete</h2>
+        <p>Please enter the admin password to delete this category:</p>
+        <input
+          type="password"
+          name="adminPassword"
+          id="admin-password"
+          placeholder="Admin password"
+          required
+        />
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="button" id="cancel-delete" class="btn btn-primary">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const formWrapper = document.getElementById('category-form-wrapper');
@@ -130,8 +155,29 @@
             errorList.appendChild(li);
           });
           errorContainer.appendChild(errorList);
-          showForm(); // Show the edit form if there was an error
         }
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const deleteButton = document.getElementById('delete-button');
+        const modal = document.getElementById('delete-modal');
+        const cancelDelete = document.getElementById('cancel-delete');
+        const errorContainer = document.getElementById('form-error-container');
+        const closeErrorBtn = document.getElementById('close-error');
+
+        const hideError = () => errorContainer.classList.add('hidden');
+
+        // Show modal
+        deleteButton.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+        });
+
+        // Hide modal
+        cancelDelete.addEventListener('click', () => {
+          modal.classList.add('hidden');
+        });
+
+        closeErrorBtn.addEventListener('click', hideError);
       });
     </script>
   </body>

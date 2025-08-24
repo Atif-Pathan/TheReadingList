@@ -12,6 +12,8 @@ const validateCategory = [
     .trim()
     .isLength({ max: 500 })
     .escape(),
+  // Add password validation
+  body('password', 'Admin password is required.').notEmpty(),
 ];
 
 // GET /categories/:id
@@ -40,7 +42,17 @@ exports.createCategoryPost = [
   async (req, res, next) => {
     try {
       const errors = validationResult(req);
-      const { name, description } = req.body;
+      const { name, description, password } = req.body;
+
+      // Check admin password first
+      if (password !== process.env.ADMIN_PASSWORD) {
+        const queryParams = new URLSearchParams({
+          error: 'Incorrect admin password.',
+          oldName: name,
+          oldDesc: description,
+        }).toString();
+        return res.redirect(`/dashboard?${queryParams}#category-form-wrapper`);
+      }
 
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map((e) => e.msg);
@@ -49,14 +61,12 @@ exports.createCategoryPost = [
           oldName: name,
           oldDesc: description,
         }).toString();
-        // Redirect back to the dashboard with errors in the URL
         return res.redirect(`/dashboard?${queryParams}#category-form-wrapper`);
       }
 
       await db.insertCategory({ name, description });
       res.redirect('/dashboard');
     } catch (error) {
-      // Handle unique name constraint from DB
       if (error.code === '23505') {
         const queryParams = new URLSearchParams({
           error: 'A category with this name already exists.',
@@ -77,7 +87,19 @@ exports.editCategoryPost = [
     const categoryId = req.params.id;
     try {
       const errors = validationResult(req);
-      const { name, description } = req.body;
+      const { name, description, password } = req.body;
+
+      // Check admin password first
+      if (password !== process.env.ADMIN_PASSWORD) {
+        const queryParams = new URLSearchParams({
+          error: 'Incorrect admin password.',
+          oldName: name,
+          oldDesc: description,
+        }).toString();
+        return res.redirect(
+          `/categories/${categoryId}?${queryParams}#category-form-wrapper`,
+        );
+      }
 
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map((e) => e.msg);
@@ -115,6 +137,18 @@ exports.deleteCategoryPost = async (req, res, next) => {
   try {
     const fromId = parseInt(req.params.id, 10);
     const archiveCategory = await db.findOrCreateCategoryByName('Archive');
+
+    const { password } = req.body;
+
+    // Check admin password first
+    if (password !== process.env.ADMIN_PASSWORD) {
+      const queryParams = new URLSearchParams({
+        error: 'Incorrect admin password.',
+      }).toString();
+      return res.redirect(
+        `/categories/${fromId}?${queryParams}#category-form-wrapper`,
+      );
+    }
 
     if (fromId === archiveCategory.id) {
       // This is a server-level rule violation, not a validation error.
