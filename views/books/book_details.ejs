@@ -8,8 +8,13 @@
   </head>
   <body>
     <div class="container">
-      <div class="back-link">
-        <a href="/dashboard">← Back to Overview</a>
+      <div class="back-links">
+        <a href="/dashboard" class="back-link">&larr; Back to Dashboard</a>
+        <% if (categoryBackLink) { %>
+        <a href="<%= categoryBackLink.url %>" class="back-link"
+          >← <%= categoryBackLink.text %></a
+        >
+        <% } %>
       </div>
 
       <!-- Top hero section: cover + main info -->

@@ -44,11 +44,26 @@ exports.getBook = async (req, res, next) => {
   try {
     const book = await db.getBookById(req.params.id);
     if (!book) {
-      return res.status(404).send('Book not found');
+      const err = new Error('Book not found');
+      err.status = 404;
+      return next(err);
     }
+
+    // --- Dynamic Back Link Logic ---
+    const referer = req.get('Referer');
+    let categoryBackLink = null;
+    // If the user came from a category page, create a link back to it
+    if (referer && referer.includes('/categories/')) {
+      categoryBackLink = {
+        url: referer,
+        text: `Back to "${book.category_name}"`,
+      };
+    }
+
     res.render('books/book_details', {
       book: book,
       title: book.title,
+      categoryBackLink: categoryBackLink, // Pass the link to the view
     });
   } catch (error) {
     next(error);
@@ -60,11 +75,23 @@ exports.createBookGet = async (req, res, next) => {
     const categories = await db.getAllCategories();
     const selectedCategoryId = req.query.category_id || null;
 
+    // --- Dynamic Back Link Logic ---
+    const referer = req.get('Referer');
+    let categoryBackLink = null;
+    // If the user came from a category page, create a link back to it
+    if (referer && referer.includes('/categories/')) {
+      categoryBackLink = {
+        url: referer,
+        text: `Back to "${categories[selectedCategoryId - 1].name}"`,
+      };
+    }
+
     res.render('books/book_form', {
       title: 'Add New Book',
       categories,
       book: { category_id: selectedCategoryId },
       errors: [],
+      categoryBackLink: categoryBackLink,
     });
   } catch (error) {
     next(error);

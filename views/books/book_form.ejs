@@ -1,117 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
-  <body>
-    <div class="container">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="back-links">
       <a href="/dashboard" class="back-link">&larr; Back to Dashboard</a>
-
-      <div class="form-container">
-        <h1><%= title %></h1>
-
-        <!-- Display validation errors if they exist -->
-        <% if (errors && errors.length > 0) { %>
+      <% if (categoryBackLink) { %>
+      <a href="<%= categoryBackLink.url %>" class="back-link"
+        >← <%= categoryBackLink.text %></a
+      >
+      <% } %>
+    </div>
+    <div class="form-container">
+      <h1><%= title %></h1>
+      <% if (locals.errors && errors.length > 0) { %>
         <ul class="error-list">
-          <% errors.forEach(error => { %>
-          <li><%= error.msg %></li>
-          <% }); %>
+          <% errors.forEach(error => { %><li><%= error.msg %></li><% }); %>
         </ul>
-        <% } %>
-
-        <form action="/books/new" method="POST" class="book-form">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="title">Title*</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value="<%= typeof book !== 'undefined' ? book.title : '' %>"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="author">Author*</label>
-              <input
-                type="text"
-                id="author"
-                name="author"
-                value="<%= typeof book !== 'undefined' ? book.author : '' %>"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="category_id">Status*</label>
-              <select id="category_id" name="category_id" required>
-                <option value="">-- Select Status --</option>
-                <% categories.forEach(category => { %>
-                <option
-                  value="<%= category.id %>"
-                  <%= (typeof book !== 'undefined' && book.category_id ==
-                  category.id) ? 'selected' : '' %>
-                >
+      <% } %>
+      <form action="/books/new" method="POST" class="book-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="title">Title*</label>
+            <input type="text" id="title" name="title" value="<%= book.title || '' %>" required />
+          </div>
+          <div class="form-group">
+            <label for="author">Author*</label>
+            <input type="text" id="author" name="author" value="<%= book.author || '' %>" required />
+          </div>
+          <div class="form-group">
+            <label for="category_id">Status*</label>
+            <select id="category_id" name="category_id" required>
+              <option value="">-- Select Status --</option>
+              <% categories.forEach(category => { %>
+                <option value="<%= category.id %>" <%= (String(book.category_id) === String(category.id)) ? 'selected' : '' %>>
                   <%= category.name %>
                 </option>
-                <% }); %>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="cover_image_url">Cover Image URL</label>
-              <input
-                type="url"
-                id="cover_image_url"
-                name="cover_image_url"
-                placeholder="https://example.com/cover.jpg"
-                value="<%= typeof book !== 'undefined' ? book.cover_image_url : '' %>"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="genre">Genre(s)</label>
-              <input
-                type="text"
-                id="genre"
-                name="genre"
-                placeholder="e.g., Sci-Fi, Fantasy"
-                value="<%= typeof book !== 'undefined' ? book.genre : '' %>"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="rating">Rating (1-10)</label>
-              <input
-                type="number"
-                id="rating"
-                name="rating"
-                min="0"
-                max="10"
-                value="<%= typeof book !== 'undefined' ? book.rating : '' %>"
-              />
-            </div>
+              <% }); %>
+            </select>
           </div>
-
           <div class="form-group">
-            <label for="review">Review & Notes</label>
-            <textarea
-              id="review"
-              name="review"
-              rows="5"
-              placeholder="Your thoughts on the book..."
-            >
-<%= typeof book !== 'undefined' ? book.review : '' %></textarea
-            >
+            <label for="genre">Genre(s)</label>
+            <input type="text" id="genre" name="genre" placeholder="e.g., Sci-Fi, Fantasy" value="<%= book.genre || '' %>" />
+            <div class="form-hint">Separate multiple genres with commas.</div>
           </div>
-
+          <div class="form-group">
+            <label for="rating">Rating (1–10)</label>
+            <input type="number" id="rating" name="rating" min="1" max="10" value="<%= (book.rating !== null && book.rating !== undefined) ? book.rating : '' %>" />
+          </div>
+          <div class="form-group">
+            <label for="cover_image_url">Cover Image URL</label>
+            <input type="url" id="cover_image_url" name="cover_image_url" placeholder="https://example.com/cover.jpg" value="<%= book.cover_image_url || '' %>" />
+          </div>
+          <div class="form-group">
+            <label for="summary">Summary</label>
+            <textarea id="summary" name="summary" rows="5" placeholder="A short synopsis of the book..."><%= book.summary || '' %></textarea>
+          </div>
+          <div class="form-group col-span-two">
+            <label for="review">Review & Notes</label>
+            <textarea id="review" name="review" rows="5" placeholder="Your thoughts on the book..."><%= book.review || '' %></textarea>
+          </div>
+        </div>
+        <div class="submit-div">
           <button type="submit" class="btn btn-primary">Save Book</button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
-  </body>
+  </div>
+</body>
 </html>
