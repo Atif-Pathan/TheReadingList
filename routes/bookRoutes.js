@@ -3,15 +3,18 @@ const { Router } = require('express');
 const bookController = require('../controllers/bookController');
 const bookRouter = Router();
 
+// CREATE a new book
 bookRouter.get('/new', bookController.createBookGet);
 bookRouter.post('/new', bookController.createBookPost);
+
+// READ a single book's details
 bookRouter.get('/:id', bookController.getBook);
-// bookRouter.get('/post', bookController.createBookPost);
-// bookRouter.get("/create", usersController.usersCreateGet);
-// bookRouter.post("/create", usersController.usersCreatePost);
-// bookRouter.get("/:id/update", usersController.usersUpdateGet);
-// bookRouter.post("/:id/update", usersController.usersUpdatePost);
-// bookRouter.post("/:id/delete", usersController.usersDeletePost);
-// bookRouter.get("/search", usersController.usersSearchGet);
+
+// UPDATE a book
+bookRouter.get('/:id/edit', bookController.editBookGet); // to show the edit form
+bookRouter.post('/:id/edit', bookController.editBookPost);
+
+// DELETE a book
+bookRouter.post('/:id/delete', bookController.deleteBookPost);
 
 module.exports = bookRouter;
