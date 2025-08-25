@@ -32,7 +32,11 @@
       </header>
 
       <div id="form-error-container">
-        <button id="close-error" class="btn-close" aria-label="Close form">
+        <button
+          id="close-error"
+          class="btn-close hidden"
+          aria-label="Close form"
+        >
           &times;
         </button>
       </div>
@@ -46,24 +50,21 @@
           <div class="th genres">Genres</div>
           <div class="th added">Added</div>
         </div>
-
         <div class="category-table-body">
           <% if (books.length) { %> <% books.forEach((book) => { %>
           <a href="/books/<%= book.id %>" class="category-row-link">
             <div class="category-row">
               <div class="cell cover">
                 <img
-                  src="<%= book.cover_image_url %>"
+                  src="<%= book.cover_image_url || '/placeholder.png' %>"
                   alt="Cover of <%= book.title %>"
                   loading="lazy"
                 />
               </div>
-
               <div class="cell title">
                 <div class="title-text"><%= book.title %></div>
                 <div class="author-text"><%= book.author %></div>
               </div>
-
               <div class="cell rating">
                 <% if (book.rating !== null) { %>
                 <span class="chip rating-chip">★ <%= book.rating %>/10</span>
@@ -71,7 +72,6 @@
                 <span class="muted">—</span>
                 <% } %>
               </div>
-
               <div class="cell genres">
                 <% if (book.genre) { %>
                 <div class="chips">
@@ -83,7 +83,6 @@
                 <span class="muted">—</span>
                 <% } %>
               </div>
-
               <div class="cell added">
                 <%= new Date(book.created_at).toLocaleDateString() %>
               </div>
@@ -130,10 +129,11 @@
         const nameInput = document.getElementById('category-name');
         const descInput = document.getElementById('category-description');
         const errorContainer = document.getElementById('form-error-container');
+        const closeErrorBtn = document.getElementById('close-error');
 
         const showForm = () => {
           formTitle.textContent = 'Edit Category';
-          formSubmit.textContent = 'Update Category';
+          formSubmit.textContent = 'Update';
           form.action = `/categories/<%= category.id %>/edit`;
           nameInput.value = `<%= category.name.replace(/'/g, "\\'") %>`;
           descInput.value = `<%= category.description ? category.description.replace(/'/g, "\\'") : '' %>`;
@@ -155,6 +155,7 @@
             errorList.appendChild(li);
           });
           errorContainer.appendChild(errorList);
+          closeErrorBtn.classList.remove('hidden');
         }
       });
 
@@ -165,7 +166,15 @@
         const errorContainer = document.getElementById('form-error-container');
         const closeErrorBtn = document.getElementById('close-error');
 
-        const hideError = () => errorContainer.classList.add('hidden');
+        const hideError = () => {
+          errorContainer.classList.add('hidden');
+          // After you render the error and show it:
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname,
+          );
+        };
 
         // Show modal
         deleteButton.addEventListener('click', () => {

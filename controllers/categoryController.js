@@ -138,10 +138,10 @@ exports.deleteCategoryPost = async (req, res, next) => {
     const fromId = parseInt(req.params.id, 10);
     const archiveCategory = await db.findOrCreateCategoryByName('Archive');
 
-    const { password } = req.body;
+    const { adminPassword } = req.body;
 
     // Check admin password first
-    if (password !== process.env.ADMIN_PASSWORD) {
+    if (adminPassword !== process.env.ADMIN_PASSWORD) {
       const queryParams = new URLSearchParams({
         error: 'Incorrect admin password.',
       }).toString();
