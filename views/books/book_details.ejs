@@ -17,12 +17,23 @@
         <% } %>
       </div>
 
+      <div id="form-error-container">
+        <button
+          id="close-error"
+          class="btn-close hidden"
+          aria-label="Close error"
+        >
+          &times;
+        </button>
+      </div>
+
       <!-- Top hero section: cover + main info -->
       <section class="book-hero">
         <div class="hero-cover">
           <img
-            src="<%= book.cover_image_url %>"
+            src="<%= book.cover_image_url || '/placeholder.png' %>"
             alt="Cover of <%= book.title %>"
+            loading="lazy"
           />
         </div>
 
@@ -61,15 +72,15 @@
           <!-- Absolutely positioned actions in top-right -->
           <div class="action-buttons hero-actions">
             <a href="/books/<%= book.id %>/edit" class="btn btn-primary"
-              >Edit Book</a
+              >Edit</a
             >
-            <form
-              class="hero-action-form"
-              action="/books/<%= book.id %>/delete"
-              method="POST"
+            <button
+              type="button"
+              id="delete-book-button"
+              class="btn btn-danger"
             >
-              <button type="submit" class="btn btn-danger">Delete Book</button>
-            </form>
+              Delete
+            </button>
           </div>
         </div>
       </section>
@@ -82,5 +93,84 @@
         </div>
       </section>
     </div>
+    <form
+      id="delete-modal"
+      class="modal hidden"
+      action="/books/<%= book.id %>/delete"
+      method="POST"
+    >
+      <div class="modal-content">
+        <h2>Confirm Delete</h2>
+        <!-- Corrected the text to refer to "book" -->
+        <p>Please enter the admin password to delete this book:</p>
+        <input
+          type="password"
+          name="password"
+          id="admin-password"
+          placeholder="Admin password"
+          required
+        />
+        <input
+          type="hidden"
+          name="redirectTo"
+          value="<%= categoryBackLink ? categoryBackLink.url : '/dashboard' %>"
+        />
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="button" id="cancel-delete" class="btn">Cancel</button>
+        </div>
+      </div>
+    </form>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // --- Delete Modal Logic ---
+        const deleteButton = document.getElementById('delete-book-button');
+        const modal = document.getElementById('delete-modal');
+        const cancelDelete = document.getElementById('cancel-delete');
+
+        if (deleteButton && modal && cancelDelete) {
+          deleteButton.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+          });
+          cancelDelete.addEventListener('click', () => {
+            modal.classList.add('hidden');
+          });
+        }
+
+        // --- Error Handling Logic ---
+        const errorContainer = document.getElementById('form-error-container');
+        const closeErrorBtn = document.getElementById('close-error');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+
+        if (error) {
+          // If an error is found in the URL, display it
+          const errorList = document.createElement('ul');
+          errorList.className = 'error-list';
+          error.split(';').forEach((msg) => {
+            const li = document.createElement('li');
+            li.textContent = msg.trim();
+            errorList.appendChild(li);
+          });
+          errorContainer.appendChild(errorList);
+          closeErrorBtn.classList.remove('hidden');
+        }
+
+        if (closeErrorBtn) {
+          closeErrorBtn.addEventListener('click', () => {
+            // Hide the error container
+            errorContainer.innerHTML = ''; // Clear the content
+            closeErrorBtn.classList.add('hidden');
+            // Clean the URL
+            window.history.replaceState(
+              {},
+              document.title,
+              window.location.pathname,
+            );
+          });
+        }
+      });
+    </script>
   </body>
 </html>

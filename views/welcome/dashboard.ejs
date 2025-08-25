@@ -18,6 +18,11 @@
         </div>
       </header>
 
+      <div id="form-error-container">
+        <button id="close-error" class="btn-close" aria-label="Close form">
+          &times;
+        </button>
+      </div>
       <%- include('../partials/category_quick_form') %>
 
       <main class="kanban-board">
@@ -35,7 +40,7 @@
             <a href="/books/<%= book.id %>" class="book-card-link">
               <div class="book-card">
                 <img
-                  src="<%= book.cover_image_url %>"
+                  src="<%= book.cover_image_url || '/placeholder.png' %>"
                   alt="Cover of <%= book.title %>"
                   loading="lazy"
                 />
@@ -56,14 +61,12 @@
               </div>
             </a>
             <% }) %> <% } else { %>
-            <p class="author" style="padding: 12px">No books here yet.</p>
+            <p class="no-books">No books here yet.</p>
             <% } %>
           </div>
 
           <footer class="kanban-foot">
-            <a href="/categories/<%= category.id %>" class="btn"
-              >View all in this list</a
-            >
+            <a href="/categories/<%= category.id %>" class="btn">View all</a>
           </footer>
         </section>
         <% }) %>
@@ -95,10 +98,25 @@
             errorList.appendChild(li);
           });
           errorContainer.appendChild(errorList);
-          nameInput.value = urlParams.get('oldName') || '';
-          descInput.value = urlParams.get('oldDesc') || '';
-          showForm();
+          // showForm();
         }
+      });
+      document.addEventListener('DOMContentLoaded', () => {
+        const cancelDelete = document.getElementById('cancel-delete');
+        const errorContainer = document.getElementById('form-error-container');
+        const closeErrorBtn = document.getElementById('close-error');
+
+        const hideError = () => {
+          errorContainer.classList.add('hidden');
+          // After you render the error and show it:
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname,
+          );
+        };
+
+        closeErrorBtn.addEventListener('click', hideError);
       });
     </script>
   </body>
