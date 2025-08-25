@@ -170,6 +170,52 @@ async function findOrCreateCategoryByName(name, description = null) {
   }
 }
 
+async function updateBook(id, book) {
+  const {
+    title,
+    author,
+    cover_image_url,
+    summary,
+    genre,
+    rating,
+    review,
+    category_id,
+  } = book;
+  try {
+    const { rows } = await pool.query(
+      `UPDATE books
+       SET title = $1, author = $2, cover_image_url = $3, summary = $4, genre = $5, rating = $6, review = $7, category_id = $8
+       WHERE id = $9
+       RETURNING id`,
+      [
+        title,
+        author,
+        cover_image_url || null,
+        summary || null,
+        genre || null,
+        rating ?? null,
+        review || null,
+        category_id,
+        id, // The ID for the WHERE clause
+      ],
+    );
+    return rows[0];
+  } catch (err) {
+    console.error('Error updating book:', err.stack);
+    throw err;
+  }
+}
+
+async function deleteBook(id) {
+  try {
+    await pool.query(`DELETE FROM books WHERE id = $1`, [id]);
+    // No return value is needed for a simple delete
+  } catch (err) {
+    console.error('Error deleting book:', err.stack);
+    throw err;
+  }
+}
+
 module.exports = {
   getAllBooks,
   getBookById,
@@ -182,4 +228,6 @@ module.exports = {
   moveBooksToCategory,
   deleteCategory,
   findOrCreateCategoryByName,
+  updateBook,
+  deleteBook,
 };
