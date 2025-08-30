@@ -46,6 +46,7 @@
         <div class="category-table-head">
           <div class="th cover">Cover</div>
           <div class="th title">Title & Author</div>
+          <div class="th review">Review/Notes</div>
           <div class="th rating">Rating</div>
           <div class="th genres">Genres</div>
           <div class="th added">Added</div>
@@ -64,6 +65,13 @@
               <div class="cell title">
                 <div class="title-text"><%= book.title %></div>
                 <div class="author-text"><%= book.author %></div>
+              </div>
+              <div class="cell review">
+                <% if (book.review) { %>
+                <span class="review-span"><%= book.review %></span>
+                <% } else { %>
+                <span class="muted">—</span>
+                <% } %>
               </div>
               <div class="cell rating">
                 <% if (book.rating !== null) { %>

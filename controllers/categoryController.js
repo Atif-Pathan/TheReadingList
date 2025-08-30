@@ -5,13 +5,11 @@ const { body, validationResult } = require('express-validator');
 const validateCategory = [
   body('name', 'Category name must be 1–100 characters.')
     .trim()
-    .isLength({ min: 1, max: 100 })
-    .escape(),
+    .isLength({ min: 1, max: 100 }),
   body('description', 'Description must be <= 500 characters.')
     .optional({ checkFalsy: true })
     .trim()
-    .isLength({ max: 500 })
-    .escape(),
+    .isLength({ max: 500 }),
   // Add password validation
   body('password', 'Admin password is required.').notEmpty(),
 ];

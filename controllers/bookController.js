@@ -7,13 +7,11 @@ const { body, validationResult } = require('express-validator');
 const validateBook = [
   body('title', 'Title is required and must be between 1 and 255 characters.')
     .trim()
-    .isLength({ min: 1, max: 255 })
-    .escape(),
+    .isLength({ min: 1, max: 255 }),
 
   body('author', 'Author is required and must be between 1 and 255 characters.')
     .trim()
-    .isLength({ min: 1, max: 255 })
-    .escape(),
+    .isLength({ min: 1, max: 255 }),
 
   body('category_id', 'You must select a category.').trim().isInt(),
 
@@ -25,8 +23,7 @@ const validateBook = [
   body('genre', 'Genre must be less than 150 characters.')
     .optional({ checkFalsy: true })
     .trim()
-    .isLength({ max: 150 })
-    .escape(),
+    .isLength({ max: 150 }),
 
   body('rating', 'Rating must be a number between 0 and 10.')
     .optional({ checkFalsy: true })
@@ -35,14 +32,12 @@ const validateBook = [
   body('review', 'Review must be less than 6000 characters.')
     .optional({ checkFalsy: true })
     .trim()
-    .isLength({ max: 6000 })
-    .escape(),
+    .isLength({ max: 6000 }),
 
   body('summary', 'Summary must be less than 1000 characters.')
     .optional({ checkFalsy: true })
     .trim()
-    .isLength({ max: 1000 })
-    .escape(),
+    .isLength({ max: 1000 }),
 ];
 
 // --- Controller Functions ---

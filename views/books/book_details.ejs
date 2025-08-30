@@ -66,7 +66,9 @@
 
           <div class="hero-summary">
             <h3>Summary</h3>
-            <p><%= book.summary || 'No summary has been added yet.' %></p>
+            <p>
+              <span style="white-space: pre-wrap"><%= book.summary || 'No summary yet.' %></span>
+            </p>
           </div>
 
           <!-- Absolutely positioned actions in top-right -->
@@ -89,7 +91,9 @@
       <section class="book-bottom">
         <div class="section center-card">
           <h3>My Notes</h3>
-          <p><%= book.review || 'No notes yet.' %></p>
+          <p 
+            <span style="white-space: pre-wrap"><%= book.review || 'No notes yet.' %></span>
+          </p>
         </div>
       </section>
     </div>
