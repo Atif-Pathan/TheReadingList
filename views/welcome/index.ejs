@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   </head>
   <body>
     <div class="container welcome-container">
-      <h1>Welcome to The Reading List!</h1>
-      <p>Track your reading journey, one book at a time.</p>
-      <a href="/dashboard">Go to my Dashboard</a>
+      <div>
+        <lottie-player
+          src="/animations/book_animation.json"
+          background="transparent"
+          speed="1"
+          style="width: 400px; height: 400px"
+          loop
+          autoplay
+        ></lottie-player>
+      </div>
+      <section class="index-text-section">
+        <h1>Welcome to The Reading List!</h1>
+        <p>Track your reading journey, one book at a time.</p>
+        <button class="btn btn-primary go-to-dash">
+          <a href="/dashboard">Go to my Dashboard</a>
+        </button>
+      </section>
     </div>
   </body>
 </html>

@@ -47,7 +47,7 @@ module.exports = [
         'error',
         {
           singleQuote: true,
-          printWidth: 80,
+          printWidth: 150,
           trailingComma: 'all',
           tabWidth: 2,
           semi: true,
