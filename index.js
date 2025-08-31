@@ -40,11 +40,11 @@ app.use((err, req, res, next) => {
   res.render('error'); // Renders views/error.ejs
 });
 
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(
-//     `My Reading List -  Server is running on http://localhost:${PORT}`,
-//   );
-// });
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(
+    `My Reading List -  Server is running on http://localhost:${PORT}`,
+  );
+});
 
-module.exports = app;
+// module.exports = app;

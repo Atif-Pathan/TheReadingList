@@ -652,7 +652,7 @@ a:hover {
 }
 @media (max-width: 768px) {
   body {
-    padding: 1rem;
+    padding: 1.5rem;
   }
   .kanban-board,
   .book-hero {
@@ -680,31 +680,49 @@ a:hover {
   .form-grid {
     grid-template-columns: 1fr;
   }
+}
+
+@media (max-width: 550px) {
   .category-table-head {
     display: none;
   }
-  .category-row {
-    grid-template-columns: 64px 1fr;
-    grid-template-areas: 'cover title' 'cover genres' 'cover rating' 'cover added';
-    gap: 8px 12px;
+  .category-row-link .category-row {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    column-gap: 0.75rem;
+    row-gap: 0;
     padding: 12px;
   }
+  .category-table-body {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
   .cell.cover {
-    grid-area: cover;
+    grid-column: 1 / 3;
+    grid-row: 1 / 7;
   }
   .cell.title {
-    grid-area: title;
+    grid-column: 3 / 6;
+    grid-row: 1 / 2;
   }
   .cell.genres {
-    grid-area: genres;
+    grid-column: 3 / 6;
+    grid-row: 2 / 4;
   }
   .cell.rating {
-    grid-area: rating;
+    grid-column: 3 / 6;
+    grid-row: 4 / 5;
+  }
+  .cell.review {
+    grid-column: 3 / 6;
+    grid-row: 5 / 7;
   }
   .cell.added {
-    grid-area: added;
+    display: none;
+    /* grid-column: 1 / 3;
+    grid-row: 6 / 7;
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 1rem; */
   }
   .quick-category-form {
     grid-template-columns: 1fr;
@@ -765,6 +783,14 @@ label em {
 @media (max-width: 768px) {
   .book-form .form-grid {
     grid-template-columns: 1fr; /* 1 column on mobile */
+    grid-template-rows: auto;
+    gap: 1rem;
+  }
+  .book-form .notes,
+  .form-password,
+  .form-summary {
+    grid-column: auto; /* Reset to auto to flow in the single column */
+    grid-row: auto; /* Reset to auto to flow naturally */
   }
 }
 
@@ -788,6 +814,34 @@ label em {
     grid-template-columns: 1fr; /* Stack on mobile */
     gap: 1rem;
     align-items: stretch;
+  }
+  .form-header {
+    flex-wrap: wrap;
+  }
+  #category-form-submit {
+    position: initial;
+  }
+  .error-list {
+    margin-bottom: 0.5rem;
+  }
+  .book-hero {
+    margin-bottom: 1.5rem;
+  }
+  .hero-actions a {
+    flex: 1;
+  }
+  #delete-book-button {
+    flex: 1;
+  }
+  .modal-content {
+    margin: 1.5rem;
+  }
+  .category-header {
+    flex-direction: column;
+  }
+  .back-links {
+    gap: 1rem;
+    font-size: 1rem;
   }
 }
 
@@ -813,7 +867,7 @@ label em {
 /* Modal content box */
 .modal-content {
   background: #fff;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem;
   border-radius: 8px;
   width: 100%;
   max-width: 400px;
