@@ -1,0 +1,10 @@
+<!-- views/partials/head.ejs -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title><%= title %></title>
+<link rel="stylesheet" href="/stylesheets/style.css" />
+
+<!-- Vercel Analytics - Common to all pages -->
+<script defer src="/_vercel/insights/script.js"></script>
+
+<% if (locals.additionalHeadContent) { %> <%- additionalHeadContent %> <% } %>
